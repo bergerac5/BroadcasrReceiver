@@ -1,9 +1,7 @@
-// calculator.jsx
-
 import React, { useState } from 'react';
 import { StyleSheet, View, TouchableOpacity, Text } from 'react-native';
 
-export default function Calculator() {
+const Calculator = ({ isDarkMode }) => {
   const [currentValue, setCurrentValue] = useState('0');
   const [operator, setOperator] = useState(null);
   const [previousValue, setPreviousValue] = useState(null);
@@ -86,10 +84,15 @@ export default function Calculator() {
           return (
             <TouchableOpacity
               key={buttonIndex}
-              style={styles.button}
+              style={[
+                styles.button,
+                { backgroundColor: isDarkMode ? '#333' : '#fff' },
+              ]}
               onPress={() => handleTap(type, button)}
             >
-              <Text style={styles.buttonText}>{button}</Text>
+              <Text style={{ fontSize: 32, color: isDarkMode ? '#fff' : '#000' }}>
+                {button}
+              </Text>
             </TouchableOpacity>
           );
         })}
@@ -98,34 +101,32 @@ export default function Calculator() {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.resultContainer}>
-        <Text style={styles.resultText}>{currentValue}</Text>
+    <View style={[styles.container, { backgroundColor: isDarkMode ? '#000' : '#f5f5f5' }]}>
+      <View style={[styles.resultContainer, { backgroundColor: isDarkMode ? '#222' : '#fff' }]}>
+        <Text style={[styles.resultText, { color: isDarkMode ? '#fff' : '#000' }]}>{currentValue}</Text>
       </View>
-      <View style={styles.buttonsContainer}>{renderButtons()}</View>
+      <View style={[styles.buttonsContainer, { backgroundColor: isDarkMode ? '#444' : '#d3d3d3' }]}>
+        {renderButtons()}
+      </View>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
   },
   resultContainer: {
     flex: 2,
     justifyContent: 'center',
     alignItems: 'flex-end',
-    backgroundColor: '#fff',
     padding: 20,
   },
   resultText: {
     fontSize: 48,
-    color: '#000',
   },
   buttonsContainer: {
     flex: 5,
-    backgroundColor: '#d3d3d3',
   },
   row: {
     flexDirection: 'row',
@@ -140,10 +141,7 @@ const styles = StyleSheet.create({
     margin: 5,
     height: 80,
     borderRadius: 40,
-    backgroundColor: '#fff',
-  },
-  buttonText: {
-    fontSize: 32,
-    color: '#000',
   },
 });
+
+export default Calculator;

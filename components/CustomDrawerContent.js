@@ -1,24 +1,60 @@
-// CustomDrawerContent.js
-
-import React from "react";
+import React, { useState } from "react";
 import { DrawerContentScrollView, DrawerItemList } from "@react-navigation/drawer";
-import { View, Image, Text, StyleSheet, Switch } from "react-native";
+import { View, Image, Text, StyleSheet, Switch, TouchableOpacity, Alert } from "react-native";
 import { Colors } from "@/constants/Colors";
+import * as ImagePicker from 'expo-image-picker';
 
 const CustomDrawerContent = (props) => {
   const { toggleDarkMode, isDarkMode } = props;
+  const [profileImage, setProfileImage] = useState(null);
 
   const toggleSwitch = () => {
     toggleDarkMode();
   };
 
+  const handleImagePicker = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setProfileImage(result.assets[0].uri);
+    }
+  };
+
+  const handleTakePicture = async () => {
+    const result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setProfileImage(result.assets[0].uri);
+    }
+  };
+
+  const handleProfilePicture = () => {
+    Alert.alert("Edit Profile Picture", "Choose an option:", [
+      { text: "Select from Gallery", onPress: handleImagePicker },
+      { text: "Take a Picture", onPress: handleTakePicture },
+      { text: "Cancel", style: "cancel" },
+    ]);
+  };
+
   return (
     <DrawerContentScrollView {...props}>
       <View style={styles.header}>
-        <Image
-          source={require("../assets/images/leaf.jpg")}
-          style={styles.photo}
-        />
+        <TouchableOpacity onPress={handleProfilePicture}>
+          <Image
+            source={profileImage ? { uri: profileImage } : require("../assets/images/leaf.jpg")}
+            style={styles.photo}
+          />
+        </TouchableOpacity>
         <Text style={styles.headerText}>Bergerac</Text>
       </View>
       <DrawerItemList {...props} />
@@ -61,7 +97,7 @@ const styles = StyleSheet.create({
     borderTopColor: "#ccc",
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
-    marginTop: '115%'
+    marginTop: '50%'
   },
   switchText: {
     fontSize: 16,

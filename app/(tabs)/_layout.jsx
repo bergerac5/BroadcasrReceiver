@@ -5,13 +5,18 @@ import { useColorScheme, View } from "react-native";
 import { DefaultTheme, DarkTheme } from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { FontAwesome } from "@expo/vector-icons";
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import CustomDrawerContent from "@/components/CustomDrawerContent";
+import AntDesign from '@expo/vector-icons/AntDesign';
 import Home from "./Home";
 import About from "./About";
 import Calculator from "./Calculator";
 import SignIn from "./SignIn";
 import Signup from "./Signup";
+import NetworkStatusChecker from "./NetworkStatus";
 import { Colors } from "@/constants/Colors";
+import BatteryMonitor from "./BatteryMonitor";
+import ContactsScreen from "./ContactsScreen";
 
 const Drawer = createDrawerNavigator();
 
@@ -68,9 +73,15 @@ const Layout = () => {
           <Drawer.Screen
             name="About"
             options={{
-              drawerLabel: 'About',
-              title: 'About us',
-              drawerIcon: () => <Ionicons name="information-circle" size={24} color={Colors.bluewhite} />,
+              drawerLabel: "About",
+              title: "About us",
+              drawerIcon: () => (
+                <Ionicons
+                  name="information-circle"
+                  size={24}
+                  color={Colors.bluewhite}
+                />
+              ),
             }}
             key={isDarkMode} // Force re-render when isDarkMode changes
           >
@@ -81,7 +92,6 @@ const Layout = () => {
 
           <Drawer.Screen
             name="Calculator"
-            component={Calculator}
             options={{
               drawerLabel: "Calculator",
               title: "Calculator",
@@ -93,7 +103,11 @@ const Layout = () => {
                 />
               ),
             }}
-          />
+          >
+            {({ navigation }) => (
+              <Calculator navigation={navigation} isDarkMode={isDarkMode} />
+            )}
+          </Drawer.Screen>
           <Drawer.Screen
             name="SignIn"
             options={{
@@ -106,7 +120,7 @@ const Layout = () => {
                   color={Colors.bluewhite}
                 />
               ),
-            }}            
+            }}
           >
             {({ navigation }) => (
               <SignIn navigation={navigation} isDarkMode={isDarkMode} />
@@ -128,7 +142,62 @@ const Layout = () => {
           >
             {({ navigation }) => (
               <Signup navigation={navigation} isDarkMode={isDarkMode} />
-            )} 
+            )}
+          </Drawer.Screen>
+          <Drawer.Screen
+            name="Battery"
+            options={{
+              drawerLabel: "Battery",
+              title: "Battery",
+              drawerIcon: () => (
+                <FontAwesome name="battery-4"
+                  size={24}
+                  color={Colors.bluewhite}
+                />
+              ),
+            }}
+          >
+            {({ navigation }) => (
+              <BatteryMonitor navigation={navigation} isDarkMode={isDarkMode} />
+            )}
+          </Drawer.Screen>
+          <Drawer.Screen
+            name="Network"
+            options={{
+              drawerLabel: "Network",
+              title: "Network",
+              drawerIcon: () => (
+                <MaterialIcons name="network-check"
+                  size={24}
+                  color={Colors.bluewhite}
+                />
+              ),
+            }}
+          >
+            {({ navigation }) => (
+              <NetworkStatusChecker
+                navigation={navigation}
+                isDarkMode={isDarkMode}
+              />
+            )}
+          </Drawer.Screen>
+
+          <Drawer.Screen
+            name="Contact"
+            options={{
+              drawerLabel: "Contact",
+              title: "Contact",
+              drawerIcon: () => (
+                <AntDesign name="contacts"
+                  size={24}
+                  color={Colors.bluewhite}
+                />
+              ),
+            }}
+          >
+            {({ navigation }) => (
+              <ContactsScreen navigation={navigation} isDarkMode={isDarkMode} />
+            )}
           </Drawer.Screen>
         </Drawer.Navigator>
       </View>
